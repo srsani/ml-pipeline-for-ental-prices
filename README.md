@@ -284,6 +284,9 @@ notebook can be understood by other people like your colleagues
 
 ## Data cleaning
 
+```
+ mlflow run . -P steps=basic_cleaning
+```
 Now we transfer the data processing we have done as part of the EDA to a new ``basic_cleaning`` 
 step that starts from the ``sample.csv`` artifact and create a new artifact ``clean_sample.csv`` 
 with the cleaned data:
