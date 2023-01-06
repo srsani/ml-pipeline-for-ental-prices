@@ -382,6 +382,13 @@ with the cleaned data:
    `clean_sample.csv` artifact
 
 ### Data testing
+
+Run the test step with:
+
+```
+mlflow run . -P steps="data_check"
+```
+
 After the cleaning, it is a good practice to put some tests that verify that the data does not
 contain surprises. 
 
