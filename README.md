@@ -466,6 +466,10 @@ Once you are done, add the step to ``main.py``. Use the name ``random_forest_exp
 **_NOTE_**: the main.py file already provides a variable ``rf_config`` to be passed as the
             ``rf_config`` parameter.
 
+```
+mlflow run . \
+         -P steps=train_random_forest
+```
 ### Optimize hyperparameters
 Re-run the entire pipeline varying the hyperparameters of the Random Forest model. This can be
 accomplished easily by exploiting the Hydra configuration system. Use the multi-run feature (adding the `-m` option 
