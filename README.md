@@ -1,23 +1,16 @@
 # Build an ML Pipeline for Short-Term Rental Prices in NYC
-You are working for a property management company renting rooms and properties for short periods of 
-time on various rental platforms. You need to estimate the typical price for a given property based 
-on the price of similar properties. Your company receives new data in bulk every week. The model needs 
-to be retrained with the same cadence, necessitating an end-to-end pipeline that can be reused.
 
-In this project you will build such a pipeline.
+In this project, we will build end-to-end property rental price predictions using scikit-learn, MLflow and Weights & Biases. The project focuses on the MLops process, such as the tracking of experiments and pipeline artifacts.
 
 ## Table of contents
 
-- [Introduction](#build-an-ML-Pipeline-for-Short-Term-Rental-Prices-in-NYC)
-- [Preliminary steps](#preliminary-steps)
-  * [Fork the Starter Kit](#fork-the-starter-kit)
-  * [Create environment](#create-environment)
-  * [Get API key for Weights and Biases](#get-api-key-for-weights-and-biases)
-  * [Cookie cutter](#cookie-cutter)
-  * [The configuration](#the-configuration)
-  * [Running the entire pipeline or just a selection of steps](#Running-the-entire-pipeline-or-just-a-selection-of-steps)
+- [Local setup](#local-setup)
+- [Cookie cutter](#cookie-cutter)
+- [Running the pipeline](#running-the-pipeline)
+  * [Entire pipeline](entire-pipeline)
   * [Pre-existing components](#pre-existing-components)
 - [Instructions](#instructions)
+   * [Entire pipeline](entire-pipeline)
   * [Exploratory Data Analysis (EDA)](#exploratory-data-analysis-eda)
   * [Data cleaning](#data-cleaning)
   * [Data testing](#data-testing)
@@ -31,54 +24,24 @@ In this project you will build such a pipeline.
   * [Train the model on a new data sample](#train-the-model-on-a-new-data-sample)
 - [Cleaning up](#cleaning-up)
 
-## Preliminary steps
-### Fork the Starter kit
-Go to [https://github.com/udacity/build-ml-pipeline-for-short-term-rental-prices.git](https://github.com/udacity/build-ml-pipeline-for-short-term-rental-prices.git)
-and click on `Fork` in the upper right corner. This will create a fork in your Github account, i.e., a copy of the
-repository that is under your control. Now clone the repository locally so you can start working on it:
+## Local setup
 
-```
-git clone https://github.com/[your github username]/build-ml-pipeline-for-short-term-rental-prices.git
-```
+- `git clone [REPO_URL]`
+- `conda env create -f environment.yml`
+- `conda activate nyc_airbnb_dev`
 
-and go into the repository:
+To run this pipeline, you need to have a "[wandb.ai](https://wandb.ai/authorize)" account and connect the CLI client to the service with the following:
 
-```
-cd build-ml-pipeline-for-short-term-rental-prices
-```
-Commit and push to the repository often while you make progress towards the solution. Remember 
-to add meaningful commit messages.
+- `wandb login [YOUR_API_KEY]`
 
-### Create environment
-Make sure to have conda installed and ready, then create a new environment using the ``environment.yml``
-file provided in the root of the repository and activate it:
-
-```bash
-> conda env create -f environment.yml
-> conda activate nyc_airbnb_dev
-```
-
-### Get API key for Weights and Biases
-Let's make sure we are logged in to Weights & Biases. Get your API key from W&B by going to 
-[https://wandb.ai/authorize](https://wandb.ai/authorize) and click on the + icon (copy to clipboard), 
-then paste your key into this command:
-
-```bash
-> wandb login [your API key]
-```
-
-You should see a message similar to:
-```
 wandb: Appending key for api.wandb.ai to your netrc file: /home/[your username]/.netrc
-```
 
-### Cookie cutter
-In order to make your job a little easier, you are provided a cookie cutter template that you can use to create 
-stubs for new pipeline components. It is not required that you use this, but it might save you from a bit of 
-boilerplate code. Just run the cookiecutter and enter the required information, and a new component 
-will be created including the `conda.yml` file, the `MLproject` file as well as the script. You can then modify these
-as needed, instead of starting from scratch.
-For example:
+
+## Cookie cutter
+
+This repo contains a cookie cutter template that you can use to add a new pipeline component.
+
+Example use case
 
 ```bash
 > cookiecutter cookie-mlflow-step -o src
@@ -91,22 +54,27 @@ long_description [An example of a step using MLflow and Weights & Biases]: Perfo
 parameters [parameter1,parameter2]: parameter1,parameter2,parameter3
 ```
 
-This will create a step called ``basic_cleaning`` under the directory ``src`` with the following structure:
-
+The following command is used to use an individual component:
+ 
 ```bash
-> ls src/basic_cleaning/
-conda.yml  MLproject  run.py
+> mlflow run src/basic_cleaning  \
+                  -P parameter1=1 \
+                   -P parameter2=2  \
+                   -P parameter3="test"
 ```
 
-You can now modify the script (``run.py``), the conda environment (``conda.yml``) and the project definition 
-(``MLproject``) as you please.
+## Running the pipeline
 
-The script ``run.py`` will receive the input parameters ``parameter1``, ``parameter2``,
-``parameter3`` and it will be called like:
+In section contains the example code to run the entire pipeline as well as running each section of the pipeline separately.
+### Entire pipeline
 
-```bash
-> mlflow run src/step_name -P parameter1=1 -P parameter2=2 -P parameter3="test"
-```
+-  run the entire pipeline:
+
+> ` mlflow run . `
+
+-  run the entire pipeline with hydra_options:
+
+> `mlflow run . -P hydra_options="etl.sample='sample2.csv'"`
 
 ### The configuration
 As usual, the parameters controlling the pipeline are defined in the ``config.yaml`` file defined in
@@ -581,3 +549,15 @@ you have trained your new model on the new data.
 ## License
 
 [License](LICENSE.txt)
+
+
+
+```
+ mlflow run https://github.com/srsani/ml-pipeline-for-ental-prices.git \ 
+             -v 0.0.1 \
+             -P hydra_options="etl.sample='sample2.csv'"
+```
+
+```
+mlflow run . -P hydra_options="etl.sample='sample2.csv'"
+```
